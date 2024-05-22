@@ -1,4 +1,4 @@
-//вариант 1 НЕ понимаю ПОБИТОВОЕ ИЛИ :((
+//вариант 1 - НЕ понимаю ПОБИТОВОЕ ИЛИ :((
 
 const FEATURES = [
   'wifi',
@@ -22,7 +22,7 @@ const createActualFeatures = (features) => {
 
   for (let i = actualFeatures.length; i > 0; i--) {
     const j = Math.random() * (i + 1) | 0;
-    [ actualFeatures[j], actualFeatures[i] ] = [ actualFeatures[i], actualFeatures[j] ];
+    [actualFeatures[j], actualFeatures[i]] = [actualFeatures[i], actualFeatures[j]];
   }
 
   return actualFeatures.slice(0, 1 + Math.random() * amount | 0);
