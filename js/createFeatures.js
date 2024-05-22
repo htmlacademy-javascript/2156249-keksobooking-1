@@ -9,13 +9,6 @@ const FEATURES = [
   'conditioner',
 ];
 
-const getRandomInteger = (a, b) => {
-  const lower = Math.ceil(Math.min(a, b));
-  const upper = Math.floor(Math.max(a, b));
-  const result = Math.random() * (upper - lower + 1) + lower;
-  return Math.floor(result);
-};
-
 const createActualFeatures = (features) => {
   const amount = getRandomInteger(1, features.length);
   const actualFeatures = features.slice();
