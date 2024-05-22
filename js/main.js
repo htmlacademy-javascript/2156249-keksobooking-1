@@ -1,6 +1,6 @@
-import { createSimilarAnnouncements } from "./data.js";
+import { createSimilarAds } from './data.js';
 
 // eslint-disable-next-line no-console
 console.log(
-  createSimilarAnnouncements()
+  createSimilarAds()
 );

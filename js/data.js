@@ -1,7 +1,7 @@
 import {getRandomInteger, getRandomInfiniteNumber, getRandomCoordinate, createAvatarNumbers} from './util.js';
 
 // Входные данные
-const SIMILAR_ANNOUNCEMENT_COUNT = 10;
+const SIMILAR_ADVERTISEMENT_COUNT = 10;
 
 const TITLES = [
   'Прекрасное предложение',
@@ -140,7 +140,7 @@ const createOffer = () => {
 };
 
 //Создаем целое объявление
-const createAnnouncement = () => (
+const createAd = () => (
   {
     author: createAuthor(),
     offer: createOffer(),
@@ -149,6 +149,6 @@ const createAnnouncement = () => (
 );
 
 //Создаем 10 объявлений
-const createSimilarAnnouncements = () => Array.from({ length: SIMILAR_ANNOUNCEMENT_COUNT }, createAnnouncement);
-export {createSimilarAnnouncements};
+const createSimilarAds = () => Array.from({ length: SIMILAR_ADVERTISEMENT_COUNT }, createAd);
+export {createSimilarAds};
 
