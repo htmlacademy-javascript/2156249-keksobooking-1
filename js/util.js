@@ -6,32 +6,12 @@ const getRandomInteger = (a, b) => {
   return Math.floor(result);
 };
 
-//Случайное целое число без диапазона
-const getRandomInfiniteNumber = () => {
-  const numReserve = [];
-  let randomNumber;
-  while (numReserve.length < 12) {
-    randomNumber = Math.ceil(Math.random() * 1000);
-    let found = false;
-    for (let i = 0; i < numReserve.length; i++) {
-      if (numReserve[i] === randomNumber) {
-        found = true;
-        break;
-      }
-    }
-    if (!found) {
-      numReserve[numReserve.length] = randomNumber;
-    }
-  }
-  return randomNumber;
-};
-
 //Случайное целое число из диапазона с плавающей точкой для координат
 const getRandomCoordinate = (a, b, decimalPlaces) => {
-
-  if (a < 0 || b < 0) {
+  if (a < 0 || b < 0 || decimalPlaces < 0) {
     return NaN;
   }
+
   const lower = Math.ceil(Math.min(a, b));
   const upper = Math.floor(Math.max(a, b));
   const result = Math.random() * (upper - lower) + lower;
@@ -58,4 +38,10 @@ const createAvatarNumbers = (start, end) => {
   return result;
 };
 
-export {getRandomInteger, getRandomInfiniteNumber, getRandomCoordinate, createAvatarNumbers};
+// Случайное число для перемешивания массивов с удобствами и фото
+const getRandomElements = () => Math.random() - 0.5;
+
+//Создаем случайный элемент для предложения
+const getRandomArrayElement = (items) => items[getRandomInteger(0, items.length - 1)];
+
+export { getRandomInteger, getRandomCoordinate, createAvatarNumbers, getRandomElements, getRandomArrayElement };

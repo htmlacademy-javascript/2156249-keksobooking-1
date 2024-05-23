@@ -1,4 +1,4 @@
-import {getRandomInteger, getRandomInfiniteNumber, getRandomCoordinate, createAvatarNumbers} from './util.js';
+import { getRandomInteger, getRandomCoordinate, createAvatarNumbers, getRandomElements, getRandomArrayElement } from './util.js';
 
 // Входные данные
 const SIMILAR_ADVERTISEMENT_COUNT = 10;
@@ -15,13 +15,13 @@ const TITLES = [
   'Идеальный отдых',
   'Выберайте нас!',
 ];
-const LAT = {
-  min: 35.65000,
-  max: 35.70000,
+const Lat = {
+  MIN: 35.65000,
+  MAX: 35.70000,
 };
-const LNG = {
-  min: 139.70000,
-  max: 139.80000,
+const Lng = {
+  MIN: 139.70000,
+  MAX: 139.80000,
 };
 const TYPES = [
   'palace',
@@ -73,82 +73,47 @@ const createAuthor = () => {
 
 //Создаем локацию
 const createLocation = () => ({
-  lat: getRandomCoordinate(LAT.min, LAT.max, 5),
-  lng: getRandomCoordinate(LNG.min, LNG.max, 5),
+  lat: getRandomCoordinate(Lat.MIN, Lat.MAX, 5),
+  lng: getRandomCoordinate(Lng.MIN, Lng.MAX, 5),
 });
 
-const hotelLocaion = createLocation();
+//Создаем адрес
+const createAddress = (loc) => `${loc.lat}, ${loc.lng}.`;
+
+//Перемешиваем массив для набора удобств и фото
+const getShuffledArray = (items) => {
+  const shuffledElements = items.sort(getRandomElements);
+  const elementsCount = getRandomInteger(0, items.length);
+  return shuffledElements.slice(0, elementsCount);
+};
 
 //Создаем предложение
-//Создаем адрес
-const createAdress = (loc) => {
-  const address = `lat: ${loc.lat}, lng: ${loc.lng}.`;
-  return address;
-};
+const createOffer = (location) => ({
+  title: getRandomArrayElement(TITLES),
+  address: createAddress(location),
+  type: getRandomArrayElement(TYPES),
+  price: getRandomInteger(1000, 100000),
+  rooms: getRandomInteger(1, 7),
+  guests: getRandomInteger(1, 10),
+  checkin: getRandomArrayElement(CHECKINS),
+  checkout: getRandomArrayElement(CHECKOUTS),
+  features: getShuffledArray(FEATURES),
+  description: getRandomArrayElement(DESCRIPTIONS),
+  photos: getShuffledArray(PHOTOS),
+});
 
-//Создаем набор удобств
-const createActualFeatures = (features) => {
-  const actualFeatures = [];
-  const start = getRandomInteger(1, features.length - 1);
-  const amount = getRandomInteger(1, features.length - 1);
-
-  if (start < amount) {
-    for (let i = start; i <= amount; i++) {
-      actualFeatures.push(features[i]);
-    }
-    return actualFeatures;
-  }
-  return features;
-};
-
-//Создаем фото
-const createPhotos = (photos) => {
-  const actualPhotos = [];
-  const start = getRandomInteger(1, photos.length - 1);
-  const amount = getRandomInteger(1, photos.length - 1);
-
-  if (start < amount) {
-    for (let i = start; i <= amount; i++) {
-      actualPhotos.push(photos[i]);
-    }
-    return actualPhotos;
-  }
-  return photos;
-};
-
-//Само предложение
-const createOffer = () => {
-  const randomTitleIndex = getRandomInteger(0, TITLES.length - 1);
-  const randomTypeIndex = getRandomInteger(0, TYPES.length - 1);
-  const randomCheckinIndex = getRandomInteger(0, CHECKINS.length - 1);
-  const randomCheckoutIndex = getRandomInteger(0, CHECKOUTS.length - 1);
-  const randomDescriptionIndex = getRandomInteger(0, DESCRIPTIONS.length - 1);
+//Создаем целое объявление
+const createAd = () => {
+  const location = createLocation();
 
   return {
-    title: TITLES[randomTitleIndex],
-    address: createAdress(hotelLocaion),
-    type: TYPES[randomTypeIndex],
-    price: getRandomInfiniteNumber(),
-    rooms: getRandomInteger(1, 7),
-    guests: getRandomInteger(1, 10),
-    checkin: CHECKINS[randomCheckinIndex],
-    checkout: CHECKOUTS[randomCheckoutIndex],
-    features: createActualFeatures(FEATURES),
-    description: DESCRIPTIONS[randomDescriptionIndex],
-    photos: createPhotos(PHOTOS),
+    author: createAuthor(),
+    offer: createOffer(location),
+    location: location,
   };
 };
 
-//Создаем целое объявление
-const createAd = () => (
-  {
-    author: createAuthor(),
-    offer: createOffer(),
-    location: hotelLocaion,
-  }
-);
-
 //Создаем 10 объявлений
 const createSimilarAds = () => Array.from({ length: SIMILAR_ADVERTISEMENT_COUNT }, createAd);
-export {createSimilarAds};
+export { createSimilarAds };
 
