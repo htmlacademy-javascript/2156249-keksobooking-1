@@ -1,30 +1,55 @@
-import { createSimilarAds } from './data.js';
-
 const mapContainer = document.querySelector('.map__canvas');
+const similarAdTemplate = document.querySelector('#card').content.querySelector('.popup');
 
-const similarAdTemplate = document.querySelector('#card')
-  .content
-  .querySelector('.popup');
-
-const similarAds = createSimilarAds();
-
-const ads = [];
-
-similarAds.forEach((similarAd) => {
-  const adElement = similarAdTemplate.cloneNode(true);
-
+const createFeatures = (adElement, ad) => {
   const featureContainer = adElement.querySelector('.popup__features');
   const featureList = featureContainer.querySelectorAll('.popup__feature');
-  const modifiers = similarAd.offer.features.map((feature) => `popup__feature--${feature}`);
+  const modifiers = ad.offer.features.map((feature) => `popup__feature--${feature}`);
 
+  featureList.forEach((featureListItem) => {
+    const modifier = featureListItem.classList[1];
+
+    if (!modifiers.includes(modifier)) {
+      featureListItem.remove();
+    }
+  });
+};
+
+const createPhotos = (adElement, ad) => {
   const photoContainer = adElement.querySelector('.popup__photos');
   const photoTemplate = photoContainer.querySelector('.popup__photo');
-  const fragment = document.createDocumentFragment(); // Создаём "коробочку"
+  const fragment = document.createDocumentFragment();
 
-  adElement.querySelector('.popup__title').textContent = similarAd.offer.title;
-  adElement.querySelector('.popup__text--address').textContent = similarAd.offer.address;
-  adElement.querySelector('.popup__text--price').textContent = similarAd.offer.price;
-  switch (similarAd.offer.type) {
+  if (ad.offer.photos.length === 0) {
+    photoContainer.innerHTML = '';
+  } else {
+    ad.offer.photos.forEach((offerPhoto) => {
+      photoContainer.innerHTML = '';
+      const photo = photoTemplate.cloneNode(true);
+
+      photo.src = `${offerPhoto}`;
+      fragment.appendChild(photo);
+    });
+
+    photoContainer.appendChild(fragment);
+  }
+};
+
+const createAdElement = (ad) => {
+  const adElement = similarAdTemplate.cloneNode(true);
+
+  adElement.querySelector('.popup__title').textContent = ad.offer.title;
+  adElement.querySelector('.popup__text--address').textContent = ad.offer.address;
+  adElement.querySelector('.popup__text--price').textContent = ad.offer.price;
+  adElement.querySelector('.popup__text--capacity').textContent = `${ad.offer.rooms} комнаты для ${ad.offer.guests} гостей`;
+  adElement.querySelector('.popup__text--time').textContent = `Заезд после ${ad.offer.checkin}, выезд до ${ad.offer.checkout}`;
+  adElement.querySelector('.popup__description').textContent = ad.offer.description;
+  adElement.querySelector('.popup__avatar').src = ad.author.avatar;
+
+  createFeatures(adElement, ad);
+  createPhotos(adElement, ad);
+
+  switch (ad.offer.type) {
     case 'palace':
       adElement.querySelector('.popup__type').textContent = 'Дворец';
       break;
@@ -41,28 +66,20 @@ similarAds.forEach((similarAd) => {
       adElement.querySelector('.popup__type').textContent = 'Отель';
       break;
   }
-  adElement.querySelector('.popup__text--capacity').textContent = `${similarAd.offer.rooms} комнаты для ${similarAd.offer.guests} гостей`;
-  adElement.querySelector('.popup__text--time').textContent = `Заезд после ${similarAd.offer.checkin}, выезд до ${similarAd.offer.checkout}`;
-  featureList.forEach((featureListItem) => {
-    const modifier = featureListItem.classList[1];
 
-    if (!modifiers.includes(modifier)) {
-      featureListItem.remove();
-    }
+  return adElement;
+};
+
+const renderAds = (ads) => {
+  const array = [];
+
+  ads.forEach((ad) => {
+    const adElement = createAdElement(ad);
+    array.push(adElement);
   });
-  adElement.querySelector('.popup__description').textContent = similarAd.offer.description;
+  mapContainer.appendChild(array[0]);
+};
 
-  similarAd.offer.photos.forEach((offerPhoto) => {
-    photoContainer.innerHTML = '';
-    const photo = photoTemplate.cloneNode(true);
+export { renderAds };
 
-    photo.src = `${offerPhoto}`;
-    fragment.appendChild(photo);
-  });
-  photoContainer.appendChild(fragment);
 
-  adElement.querySelector('.popup__avatar').src = similarAd.author.avatar;
-  ads.push(adElement);
-});
-
-mapContainer.append(ads[0]);
