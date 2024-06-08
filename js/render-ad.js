@@ -1,18 +1,31 @@
+const typeMap = {
+  flat: 'Квартира',
+  bungalow: 'Бунгало',
+  house: 'Дом',
+  palace: 'Дворец',
+  hotel: 'Отель'
+};
+
 const mapContainer = document.querySelector('.map__canvas');
 const similarAdTemplate = document.querySelector('#card').content.querySelector('.popup');
 
+
 const createFeatures = (adElement, ad) => {
   const featureContainer = adElement.querySelector('.popup__features');
-  const featureList = featureContainer.querySelectorAll('.popup__feature');
-  const modifiers = ad.offer.features.map((feature) => `popup__feature--${feature}`);
+  const fragment = document.createDocumentFragment();
 
-  featureList.forEach((featureListItem) => {
-    const modifier = featureListItem.classList[1];
-
-    if (!modifiers.includes(modifier)) {
-      featureListItem.remove();
-    }
-  });
+  if (!ad.offer.features || ad.offer.features.length === 0) {
+    featureContainer.remove();
+  } else {
+    featureContainer.innerHTML = '';
+    ad.offer.features.forEach((offerFeature) => {
+      const feature = document.createElement('li');
+      feature.classList.add('popup__feature');
+      feature.classList.add(`popup__feature--${offerFeature}`);
+      fragment.appendChild(feature);
+    });
+  }
+  featureContainer.appendChild(fragment);
 };
 
 const createPhotos = (adElement, ad) => {
@@ -20,17 +33,16 @@ const createPhotos = (adElement, ad) => {
   const photoTemplate = photoContainer.querySelector('.popup__photo');
   const fragment = document.createDocumentFragment();
 
-  if (ad.offer.photos.length === 0) {
-    photoContainer.innerHTML = '';
+  if (!ad.offer.photos || ad.offer.photos.length === 0) {
+    photoContainer.remove();
   } else {
     ad.offer.photos.forEach((offerPhoto) => {
       photoContainer.innerHTML = '';
       const photo = photoTemplate.cloneNode(true);
 
-      photo.src = `${offerPhoto}`;
+      photo.src = offerPhoto;
       fragment.appendChild(photo);
     });
-
     photoContainer.appendChild(fragment);
   }
 };
@@ -51,35 +63,29 @@ const createAdElement = (ad) => {
 
   switch (ad.offer.type) {
     case 'palace':
-      adElement.querySelector('.popup__type').textContent = 'Дворец';
+      adElement.querySelector('.popup__type').textContent = typeMap.palace;
       break;
     case 'flat':
-      adElement.querySelector('.popup__type').textContent = 'Квартира';
+      adElement.querySelector('.popup__type').textContent = typeMap.flat;
       break;
     case 'house':
-      adElement.querySelector('.popup__type').textContent = 'Дом';
+      adElement.querySelector('.popup__type').textContent = typeMap.house;
       break;
     case 'bungalow':
-      adElement.querySelector('.popup__type').textContent = 'Бунгало';
+      adElement.querySelector('.popup__type').textContent = typeMap.bungalow;
       break;
     case 'hotel':
-      adElement.querySelector('.popup__type').textContent = 'Отель';
+      adElement.querySelector('.popup__type').textContent = typeMap.hotel;
       break;
   }
 
   return adElement;
 };
 
-const renderAds = (ads) => {
-  const array = [];
-
-  ads.forEach((ad) => {
-    const adElement = createAdElement(ad);
-    array.push(adElement);
-  });
-  mapContainer.appendChild(array[0]);
+const renderAd = (ads) => {
+  const adElement = createAdElement(ads[0]);
+  mapContainer.appendChild(adElement);
 };
 
-export { renderAds };
 
-
+export { renderAd };

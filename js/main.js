@@ -1,6 +1,6 @@
 import { createSimilarAds } from './data.js';
-import { renderAds } from './render-ads.js';
+import { renderAd } from './render-ad.js';
 
 const similarAds = createSimilarAds();
 
-renderAds(similarAds);
+renderAd(similarAds);
