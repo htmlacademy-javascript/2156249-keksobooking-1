@@ -93,7 +93,7 @@ const createOffer = (location) => ({
   address: createAddress(location),
   type: getRandomArrayElement(TYPES),
   price: getRandomInteger(1000, 100000),
-  rooms: getRandomInteger(1, 7),
+  //rooms: getRandomInteger(1, 7),
   guests: getRandomInteger(1, 10),
   checkin: getRandomArrayElement(CHECKINS),
   checkout: getRandomArrayElement(CHECKOUTS),
