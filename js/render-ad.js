@@ -3,21 +3,21 @@ const typeMap = {
   bungalow: 'Бунгало',
   house: 'Дом',
   palace: 'Дворец',
-  hotel: 'Отель'
+  hotel: 'Отель',
 };
 
 const mapContainer = document.querySelector('.map__canvas');
 const similarAdTemplate = document.querySelector('#card').content.querySelector('.popup');
 
-const createFeatures = (adElement, ad) => {
+const createFeatures = (adElement, features) => {
   const featureContainer = adElement.querySelector('.popup__features');
   const fragment = document.createDocumentFragment();
 
-  if (!ad.offer.features || ad.offer.features.length === 0) {
+  if (!features || features.length === 0) {
     featureContainer.remove();
   } else {
     featureContainer.innerHTML = '';
-    ad.offer.features.forEach((offerFeature) => {
+    features.forEach((offerFeature) => {
       const feature = document.createElement('li');
       feature.classList.add('popup__feature');
       feature.classList.add(`popup__feature--${offerFeature}`);
@@ -27,15 +27,15 @@ const createFeatures = (adElement, ad) => {
   featureContainer.appendChild(fragment);
 };
 
-const createPhotos = (adElement, ad) => {
+const createPhotos = (adElement, photos) => {
   const photoContainer = adElement.querySelector('.popup__photos');
   const photoTemplate = photoContainer.querySelector('.popup__photo');
   const fragment = document.createDocumentFragment();
 
-  if (!ad.offer.photos || ad.offer.photos.length === 0) {
+  if (!photos || photos.length === 0) {
     photoContainer.remove();
   } else {
-    ad.offer.photos.forEach((offerPhoto) => {
+    photos.forEach((offerPhoto) => {
       photoContainer.innerHTML = '';
       const photo = photoTemplate.cloneNode(true);
 
@@ -46,33 +46,54 @@ const createPhotos = (adElement, ad) => {
   }
 };
 
-//Попробовала реализовать функцию, но она не рабботает в полной мере
-const fillElementAtribute = (element, attribut, value) => {
-  if (!value || typeof value === 'undefined') {
-    element.querySelector(`${attribut}`).innerHTML = '';
+const getRoomPlural = (rooms) => {
+  const oneRoom = 'комната';
+  const twoFourRooms = 'комнаты';
+  const severalRooms = 'комнат';
+  if (rooms === 1) {
+    return oneRoom;
+  } else if (rooms === 2 || rooms === 3 || rooms === 4) {
+    return twoFourRooms;
+  } else {
+    return severalRooms;
+  }
+};
+
+const getGuestPlural = (guests) => {
+  const oneGuest = 'гостя';
+  const severalGuests = 'гостей';
+  if (guests === 1) {
+    return oneGuest;
+  } else {
+    return severalGuests;
+  }
+};
+
+const getCapacity = (rooms, guests) => rooms && guests ? `${rooms} ${getRoomPlural(rooms)}  для ${guests} ${getGuestPlural(guests)}` : null;
+
+const getTime = (checkin, checkout) => checkin && checkout ? `Заезд после ${checkin}, выезд до ${checkout}` : null;
+
+const fillElementAtribute = (element, attribut, property, value) => {
+  if (!value) {
     element.querySelector(`${attribut}`).remove();
   } else {
-    element.querySelector(`${attribut}`).textContent = value;
+    element.querySelector(`${attribut}`)[property] = value;
   }
 };
 
 const createAdElement = (ad) => {
   const adElement = similarAdTemplate.cloneNode(true);
 
-  fillElementAtribute(adElement, '.popup__title', ad.offer.title);
+  fillElementAtribute(adElement, '.popup__title', 'textContent', ad.offer.title);
+  fillElementAtribute(adElement, '.popup__text--address', 'textContent', ad.offer.address);
+  fillElementAtribute(adElement, '.popup__text--price', 'textContent', ad.offer.price);
+  fillElementAtribute(adElement, '.popup__text--capacity', 'textContent', getCapacity(ad.offer.rooms, ad.offer.guests));
+  fillElementAtribute(adElement, '.popup__text--time', 'textContent', getTime(ad.offer.checkin, ad.offer.checkout));
+  fillElementAtribute(adElement, '.popup__description', 'textContent', ad.offer.description);
+  fillElementAtribute(adElement, '.popup__avatar', 'src', ad.author.avatar);
 
-  //вот тут случается главный затык
-  fillElementAtribute(adElement, '.popup__text--capacity', `${ad.offer.rooms} комнаты для гостей`);
-
-  adElement.querySelector('.popup__text--address').textContent = ad.offer.address;
-  adElement.querySelector('.popup__text--price').textContent = ad.offer.price;
-  //adElement.querySelector('.popup__text--capacity').textContent = `${ad.offer.rooms} комнаты для ${ad.offer.guests} гостей`;
-  adElement.querySelector('.popup__text--time').textContent = `Заезд после ${ad.offer.checkin}, выезд до ${ad.offer.checkout}`;
-  adElement.querySelector('.popup__description').textContent = ad.offer.description;
-  adElement.querySelector('.popup__avatar').src = ad.author.avatar;
-
-  createFeatures(adElement, ad);
-  createPhotos(adElement, ad);
+  createFeatures(adElement, ad.offer.features);
+  createPhotos(adElement, ad.offer.photos);
 
   switch (ad.offer.type) {
     case 'palace':
