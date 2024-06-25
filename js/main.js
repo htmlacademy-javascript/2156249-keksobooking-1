@@ -1,6 +1,6 @@
 import { createSimilarAds } from './data.js';
+import { renderAd } from './render-ad.js';
 
-// eslint-disable-next-line no-console
-console.log(
-  createSimilarAds()
-);
+const similarAds = createSimilarAds();
+
+renderAd(similarAds[0]);
