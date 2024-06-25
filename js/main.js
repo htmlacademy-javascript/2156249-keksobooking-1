@@ -3,4 +3,4 @@ import { renderAd } from './render-ad.js';
 
 const similarAds = createSimilarAds();
 
-renderAd(similarAds);
+renderAd(similarAds[0]);

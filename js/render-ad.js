@@ -87,6 +87,7 @@ const createAdElement = (ad) => {
   fillElementAtribute(adElement, '.popup__title', 'textContent', ad.offer.title);
   fillElementAtribute(adElement, '.popup__text--address', 'textContent', ad.offer.address);
   fillElementAtribute(adElement, '.popup__text--price', 'textContent', ad.offer.price);
+  fillElementAtribute(adElement, '.popup__type', 'textContent', typeMap[ad.offer.type]);
   fillElementAtribute(adElement, '.popup__text--capacity', 'textContent', getCapacity(ad.offer.rooms, ad.offer.guests));
   fillElementAtribute(adElement, '.popup__text--time', 'textContent', getTime(ad.offer.checkin, ad.offer.checkout));
   fillElementAtribute(adElement, '.popup__description', 'textContent', ad.offer.description);
@@ -95,29 +96,11 @@ const createAdElement = (ad) => {
   createFeatures(adElement, ad.offer.features);
   createPhotos(adElement, ad.offer.photos);
 
-  switch (ad.offer.type) {
-    case 'palace':
-      adElement.querySelector('.popup__type').textContent = typeMap.palace;
-      break;
-    case 'flat':
-      adElement.querySelector('.popup__type').textContent = typeMap.flat;
-      break;
-    case 'house':
-      adElement.querySelector('.popup__type').textContent = typeMap.house;
-      break;
-    case 'bungalow':
-      adElement.querySelector('.popup__type').textContent = typeMap.bungalow;
-      break;
-    case 'hotel':
-      adElement.querySelector('.popup__type').textContent = typeMap.hotel;
-      break;
-  }
-
   return adElement;
 };
 
-const renderAd = (ads) => {
-  const adElement = createAdElement(ads[0]);
+const renderAd = (ad) => {
+  const adElement = createAdElement(ad);
   mapContainer.appendChild(adElement);
 };
 
