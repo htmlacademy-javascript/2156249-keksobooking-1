@@ -44,4 +44,11 @@ const getRandomElements = () => Math.random() - 0.5;
 //Создаем случайный элемент для предложения
 const getRandomArrayElement = (items) => items[getRandomInteger(0, items.length - 1)];
 
-export { getRandomInteger, getRandomCoordinate, createAvatarNumbers, getRandomElements, getRandomArrayElement };
+//Задаем элементам значение disabled
+const setDisabledState = (elements, isDisabled) => {
+  elements.forEach((element) => {
+    element.disabled = isDisabled;
+  });
+};
+
+export { getRandomInteger, getRandomCoordinate, createAvatarNumbers, getRandomElements, getRandomArrayElement, setDisabledState };
