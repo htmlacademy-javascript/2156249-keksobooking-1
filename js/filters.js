@@ -12,6 +12,8 @@ const disableFilters = () => {
   featuresElement.disabled = true;
 };
 
+disableFilters();
+
 const enableFilters = () => {
   mapFiltersForm.classList.remove('map__filters--disabled');
 
@@ -21,7 +23,6 @@ const enableFilters = () => {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-  disableFilters();
+  enableFilters();
 });
 
-export { enableFilters };

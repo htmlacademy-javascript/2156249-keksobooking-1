@@ -14,6 +14,8 @@ const disableForm = () => {
   sliderElement.disabled = true;
 };
 
+disableForm();
+
 const enableForm = () => {
   adForm.classList.remove('ad-form--disabled');
 
@@ -24,7 +26,5 @@ const enableForm = () => {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-  disableForm();
+  enableForm();
 });
-
-export { enableForm };
