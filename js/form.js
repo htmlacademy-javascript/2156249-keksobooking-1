@@ -8,7 +8,15 @@ const adFormElements = adForm.querySelectorAll('.ad-form__element');
 const uploadPhotoElement = adForm.querySelector('.ad-form-header__input');
 const sliderElement = adForm.querySelector('.ad-form__slider');
 
-const titleElement = adForm.querySelector('#title'); //если у элемента нет класса, могу ли я искать по id или это нарушения критерия про единообразие?
+const titleFieldElement = adForm.querySelector('#title');
+const guestAmountElement = adForm.querySelector('#capacity');
+const roomAmountElement = adForm.querySelector('#room_number');
+const roomGuestRatio = {
+  '1': 1,
+  '2': 2,
+  '3': 3,
+  '100': 0,
+};
 
 const disableForm = () => {
   adForm.classList.add('ad-form--disabled');
@@ -44,17 +52,24 @@ const pristine = new Pristine(adForm, {
 
 const validateTitle = (value) => value.length >= MIN_TITLE_LENGTH && value.length <= MAX_TITLE_LENGTH;
 
-pristine.addValidator(titleElement, validateTitle, `От ${MIN_TITLE_LENGTH} до ${MAX_TITLE_LENGTH} символов`);
+pristine.addValidator(titleFieldElement, validateTitle, `От ${MIN_TITLE_LENGTH} до ${MAX_TITLE_LENGTH} символов`);
 
-//Валидация количества комнат и количества мест
+//Валидация количества мест в зависимости от количества комнат
+
+const validateGuestAmount = (value) => {
+  const roomsActualAmount = roomAmountElement.options[roomAmountElement.selectedIndex].value;
+
+  return parseInt(value, 10) <= roomGuestRatio[roomsActualAmount];
+};
+
+const getGuestAmountErrorMessage = () => 'Ошибка';
+
+pristine.addValidator(guestAmountElement, validateGuestAmount, getGuestAmountErrorMessage);
+
+
+//Общая валидация формы
 
 adForm.addEventListener('submit', (evt) => {
   evt.preventDefault();
-
-  const isValid = pristine.validate();
-  if (isValid) {
-    console.log('Можно отправлять');
-  } else {
-    console.log('Форма невалидна');
-  }
+  pristine.validate();
 });
