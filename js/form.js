@@ -54,7 +54,7 @@ const validateTitle = (value) => value.length >= MIN_TITLE_LENGTH && value.lengt
 
 pristine.addValidator(titleFieldElement, validateTitle, `От ${MIN_TITLE_LENGTH} до ${MAX_TITLE_LENGTH} символов`);
 
-//Валидация количества мест в зависимости от количества комнат
+//Валидация количества гостей в зависимости от количества комнат
 
 const validateGuestAmount = (value) => {
   const roomsActualAmount = roomAmountElement.options[roomAmountElement.selectedIndex].value;
@@ -67,6 +67,18 @@ const validateGuestAmount = (value) => {
 const getGuestAmountErrorMessage = () => 'Значение не подходит для выбранного количества комнат';
 
 pristine.addValidator(guestAmountElement, validateGuestAmount, getGuestAmountErrorMessage);
+
+// Валидация при изменении количества комнат
+
+const onRoomAmountOptionChange = () => {
+  const roomsActualAmount = roomAmountElement.options[roomAmountElement.selectedIndex].value;
+  const roomGuestRatioArray = roomGuestRatio[roomsActualAmount];
+  const isValueInArray = roomGuestRatioArray.includes('guestAmountElement.value');
+
+  pristine.validate(isValueInArray);
+};
+
+roomAmountElement.addEventListener('change', onRoomAmountOptionChange);
 
 //Общая валидация формы
 
