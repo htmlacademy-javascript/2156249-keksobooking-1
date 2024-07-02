@@ -12,10 +12,10 @@ const titleFieldElement = adForm.querySelector('#title');
 const guestAmountElement = adForm.querySelector('#capacity');
 const roomAmountElement = adForm.querySelector('#room_number');
 const roomGuestRatio = {
-  '1': 1,
-  '2': 2,
-  '3': 3,
-  '100': 0,
+  '1': ['1'],
+  '2': ['2', '1'],
+  '3': ['3', '2', '1'],
+  '100': ['0'],
 };
 
 const disableForm = () => {
@@ -59,13 +59,14 @@ pristine.addValidator(titleFieldElement, validateTitle, `От ${MIN_TITLE_LENGTH
 const validateGuestAmount = (value) => {
   const roomsActualAmount = roomAmountElement.options[roomAmountElement.selectedIndex].value;
 
-  return parseInt(value, 10) <= roomGuestRatio[roomsActualAmount];
+  const result = roomGuestRatio[roomsActualAmount].some((item) => item === value);
+
+  return result;
 };
 
-const getGuestAmountErrorMessage = () => 'Ошибка';
+const getGuestAmountErrorMessage = () => 'Значение не подходит для выбранного количества комнат';
 
 pristine.addValidator(guestAmountElement, validateGuestAmount, getGuestAmountErrorMessage);
-
 
 //Общая валидация формы
 
