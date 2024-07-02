@@ -18,6 +18,16 @@ const roomGuestRatio = {
   '100': ['0'],
 };
 
+const accommodationTypeElement = adForm.querySelector('#type');
+const priceElement = adForm.querySelector('#price');
+const typePriceRatio = {
+  'bungalow': 0,
+  'flat': 1000,
+  'hotel': 3000,
+  'house': 5000,
+  'palace': 10000,
+};
+
 const disableForm = () => {
   adForm.classList.add('ad-form--disabled');
 
@@ -36,6 +46,8 @@ const enableForm = () => {
 
   uploadPhotoElement.disabled = false;
   sliderElement.disabled = false;
+
+  priceElement.setAttribute('min', 1000);
 };
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -79,6 +91,24 @@ const onRoomAmountOptionChange = () => {
 };
 
 roomAmountElement.addEventListener('change', onRoomAmountOptionChange);
+
+//Валидация минимальной цены за ночь в зависимости от типа жилья
+
+const validateMinPrice = (value) => value >= parseInt(priceElement.min, 10);
+
+const minPriceErrorMessage = () => `Минимальная цена ${priceElement.min}`;
+
+pristine.addValidator(priceElement, validateMinPrice, minPriceErrorMessage);
+
+const typeOptionChange = () => {
+  const actualType = accommodationTypeElement.options[accommodationTypeElement.selectedIndex].value;
+  priceElement.placeholder = typePriceRatio[actualType];
+  priceElement.setAttribute('min', typePriceRatio[actualType]);
+
+  pristine.validate(priceElement);
+};
+
+accommodationTypeElement.addEventListener('change', typeOptionChange);
 
 //Общая валидация формы
 
