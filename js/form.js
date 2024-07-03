@@ -57,10 +57,13 @@ document.addEventListener('DOMContentLoaded', () => {
   enableForm();
 });
 
+//Подключение библиотеки Pristine - основные настройки
+
 const pristine = new Pristine(adForm, {
   classTo: 'ad-form__element',
+  errorClass: 'ad-form__element--invalid',
   errorTextParent: 'ad-form__element',
-  errorTextClass: 'ad-form__element--invalid',
+  errorTextClass: 'text-help',
 });
 
 //Валидация заголовка объявления
@@ -131,6 +134,9 @@ ckeckoutOutElement.addEventListener('change', onCheckOutOptionChange);
 //Общая валидация формы
 
 adForm.addEventListener('submit', (evt) => {
-  evt.preventDefault();
-  pristine.validate();
+  const isValid = pristine.validate();
+
+  if (!isValid) {
+    evt.preventDefault();
+  }
 });
