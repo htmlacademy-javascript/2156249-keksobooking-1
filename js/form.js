@@ -28,6 +28,9 @@ const typePriceRatio = {
   'palace': 10000,
 };
 
+const checkInElement = adForm.querySelector('#timein');
+const ckeckoutOutElement = adForm.querySelector('#timeout');
+
 const disableForm = () => {
   adForm.classList.add('ad-form--disabled');
 
@@ -100,7 +103,7 @@ const minPriceErrorMessage = () => `Минимальная цена ${priceEleme
 
 pristine.addValidator(priceElement, validateMinPrice, minPriceErrorMessage);
 
-const typeOptionChange = () => {
+const onTypeOptionChange = () => {
   const actualType = accommodationTypeElement.options[accommodationTypeElement.selectedIndex].value;
   priceElement.placeholder = typePriceRatio[actualType];
   priceElement.setAttribute('min', typePriceRatio[actualType]);
@@ -108,7 +111,22 @@ const typeOptionChange = () => {
   pristine.validate(priceElement);
 };
 
-accommodationTypeElement.addEventListener('change', typeOptionChange);
+accommodationTypeElement.addEventListener('change', onTypeOptionChange);
+
+//Синхронизация времени заезда и выезда
+
+const onCheckInOptionChange = () => {
+  const actualCheckIn = checkInElement.options[checkInElement.selectedIndex].value;
+  ckeckoutOutElement.value = actualCheckIn;
+};
+
+const onCheckOutOptionChange = () => {
+  const actualCheckOut = ckeckoutOutElement.options[ckeckoutOutElement.selectedIndex].value;
+  checkInElement.value = actualCheckOut;
+};
+
+checkInElement.addEventListener('change', onCheckInOptionChange);
+ckeckoutOutElement.addEventListener('change', onCheckOutOptionChange);
 
 //Общая валидация формы
 
