@@ -1,4 +1,10 @@
+import { enableForm } from './form.js';
+
 const map = L.map('map-canvas')
+  .on('load', () => {
+    console.log('Карта инициализирована');
+    enableForm();
+  })
   .setView({
     lat: 35.6421,
     lng: 139.8302,

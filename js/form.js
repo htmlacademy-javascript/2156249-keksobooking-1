@@ -40,8 +40,6 @@ const disableForm = () => {
   sliderElement.disabled = true;
 };
 
-disableForm();
-
 const enableForm = () => {
   adForm.classList.remove('ad-form--disabled');
 
@@ -54,7 +52,7 @@ const enableForm = () => {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-  enableForm();
+  disableForm();
 });
 
 //Подключение библиотеки Pristine - основные настройки
@@ -140,3 +138,5 @@ adForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
   }
 });
+
+export { enableForm };
