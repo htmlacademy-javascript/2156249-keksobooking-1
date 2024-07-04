@@ -51,9 +51,7 @@ const enableForm = () => {
   priceElement.setAttribute('min', 1000);
 };
 
-document.addEventListener('DOMContentLoaded', () => {
-  disableForm();
-});
+disableForm();
 
 //Подключение библиотеки Pristine - основные настройки
 

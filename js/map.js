@@ -1,9 +1,10 @@
 import { enableForm } from './form.js';
+import { enableFilters } from './filters.js';
 
 const map = L.map('map-canvas')
   .on('load', () => {
-    console.log('Карта инициализирована');
     enableForm();
+    enableFilters();
   })
   .setView({
     lat: 35.6421,
