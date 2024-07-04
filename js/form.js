@@ -137,4 +137,4 @@ adForm.addEventListener('submit', (evt) => {
   }
 });
 
-export { enableForm };
+export { enableForm, adForm };
