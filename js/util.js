@@ -51,4 +51,19 @@ const setDisabledState = (elements, isDisabled) => {
   });
 };
 
-export { getRandomInteger, getRandomCoordinate, createAvatarNumbers, getRandomElements, getRandomArrayElement, setDisabledState };
+//Заполняем элемент шаблона нужным содержанием
+const fillElementAtribute = (element, attribut, property, value) => {
+  if (!value) {
+    element.querySelector(`${attribut}`).remove();
+  } else {
+    element.querySelector(`${attribut}`)[property] = value;
+  }
+};
+
+//Округляем значения координат
+const roundCoordinates = (coordinate, decimals) => Number(coordinate.toFixed(decimals));
+
+export {
+  getRandomInteger, getRandomCoordinate, createAvatarNumbers, getRandomElements,
+  getRandomArrayElement, setDisabledState, fillElementAtribute, roundCoordinates
+};

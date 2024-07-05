@@ -1,6 +1,8 @@
 import { enableForm, adForm } from './form.js';
 import { enableFilters } from './filters.js';
 import { createSimilarAds } from './data.js';
+import { createAdElement } from './render-ad.js';
+import { roundCoordinates } from './util.js';
 
 const DefaultLocationForMap = {
   LAT: 35.6421,
@@ -51,8 +53,6 @@ const marker = L.marker(
 
 marker.addTo(map);
 
-const roundCoordinates = (coordinate, decimals) => Number(coordinate.toFixed(decimals));
-
 marker.on('moveend', (evt) => {
   const actualLocation = evt.target.getLatLng();
   const actualLat = roundCoordinates(actualLocation.lat, 5);
@@ -63,10 +63,6 @@ marker.on('moveend', (evt) => {
 //Добавляем метки из сгенерированных днных на карту
 
 const similarAds = createSimilarAds();
-const locationsFromAds = [];
-similarAds.forEach((similarAd) => {
-  locationsFromAds.push(similarAd.location);
-});
 
 const icon = L.icon({
   iconUrl: './img/pin.svg',
@@ -74,16 +70,20 @@ const icon = L.icon({
   iconAnchor: [20, 40],
 });
 
-locationsFromAds.forEach(({ lat, lng }) => {
+const popupTemplate = document.querySelector('#card').content.querySelector('.popup');
+
+similarAds.forEach((similarAd) => {
   const similarAdsMarker = L.marker(
     {
-      lat,
-      lng,
+      lat: similarAd.location.lat,
+      lng: similarAd.location.lng,
     },
     {
       icon
     },
   );
 
-  similarAdsMarker.addTo(map);
+  similarAdsMarker
+    .addTo(map)
+    .bindPopup(createAdElement(similarAd, popupTemplate));
 });
