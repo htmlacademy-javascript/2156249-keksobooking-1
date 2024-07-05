@@ -1,23 +1,28 @@
 import { enableForm, adForm } from './form.js';
 import { enableFilters } from './filters.js';
+import { createSimilarAds } from './data.js';
 
-const DEFAULT_LOCATION = {
-  lat: 35.6421,
-  lng: 139.8302,
+const DefaultLocationForMap = {
+  LAT: 35.6421,
+  LNG: 139.8302,
+};
+
+const DefaultLocationForMarker = {
+  LAT: 35.6573,
+  LNG: 139.7823,
 };
 
 const addressFieldElement = adForm.querySelector('#address');
-addressFieldElement.readOnly = true;
 
 const map = L.map('map-canvas')
   .on('load', () => {
     enableForm();
     enableFilters();
-    addressFieldElement.value = `${DEFAULT_LOCATION.lat}, ${DEFAULT_LOCATION.lng}`;
+    addressFieldElement.value = `${DefaultLocationForMarker.LAT}, ${DefaultLocationForMarker.LNG}`;
   })
   .setView({
-    lat: DEFAULT_LOCATION.lat,
-    lng: DEFAULT_LOCATION.lng,
+    lat: DefaultLocationForMap.LAT,
+    lng: DefaultLocationForMap.LNG,
   }, 12);
 
 L.tileLayer(
@@ -35,8 +40,8 @@ const mainPinIcon = L.icon({
 
 const marker = L.marker(
   {
-    lat: 35.6573,
-    lng: 139.7823,
+    lat: DefaultLocationForMarker.LAT,
+    lng: DefaultLocationForMarker.LNG,
   },
   {
     draggable: true,
@@ -53,4 +58,32 @@ marker.on('moveend', (evt) => {
   const actualLat = roundCoordinates(actualLocation.lat, 5);
   const actualLng = roundCoordinates(actualLocation.lng, 5);
   addressFieldElement.value = `${actualLat}, ${actualLng}`;
+});
+
+//Добавляем метки из сгенерированных днных на карту
+
+const similarAds = createSimilarAds();
+const locationsFromAds = [];
+similarAds.forEach((similarAd) => {
+  locationsFromAds.push(similarAd.location);
+});
+
+const icon = L.icon({
+  iconUrl: './img/pin.svg',
+  iconSize: [40, 40],
+  iconAnchor: [20, 40],
+});
+
+locationsFromAds.forEach(({ lat, lng }) => {
+  const similarAdsMarker = L.marker(
+    {
+      lat,
+      lng,
+    },
+    {
+      icon
+    },
+  );
+
+  similarAdsMarker.addTo(map);
 });
