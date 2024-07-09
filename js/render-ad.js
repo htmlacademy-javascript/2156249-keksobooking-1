@@ -8,7 +8,7 @@ const typeMap = {
   hotel: 'Отель',
 };
 
-const mapContainer = document.querySelector('.map__canvas');
+const similarAdTemplate = document.querySelector('#card').content.querySelector('.popup');
 
 const createFeatures = (adElement, features) => {
   const featureContainer = adElement.querySelector('.popup__features');
@@ -74,28 +74,22 @@ const getCapacity = (rooms, guests) => rooms && guests ? `${rooms} ${getRoomPlur
 
 const getTime = (checkin, checkout) => checkin && checkout ? `Заезд после ${checkin}, выезд до ${checkout}` : null;
 
-const createAdElement = (ad, template) => {
-  const element = template.cloneNode(true);
+const createAdElement = (ad) => {
+  const adElement = similarAdTemplate.cloneNode(true);
 
-  fillElementAtribute(element, '.popup__title', 'textContent', ad.offer.title);
-  fillElementAtribute(element, '.popup__text--address', 'textContent', ad.offer.address);
-  fillElementAtribute(element, '.popup__text--price', 'textContent', `${ad.offer.price} ₽/ночь`);
-  fillElementAtribute(element, '.popup__type', 'textContent', typeMap[ad.offer.type]);
-  fillElementAtribute(element, '.popup__text--capacity', 'textContent', getCapacity(ad.offer.rooms, ad.offer.guests));
-  fillElementAtribute(element, '.popup__text--time', 'textContent', getTime(ad.offer.checkin, ad.offer.checkout));
-  fillElementAtribute(element, '.popup__description', 'textContent', ad.offer.description);
-  fillElementAtribute(element, '.popup__avatar', 'src', ad.author.avatar);
+  fillElementAtribute(adElement, '.popup__title', 'textContent', ad.offer.title);
+  fillElementAtribute(adElement, '.popup__text--address', 'textContent', ad.offer.address);
+  fillElementAtribute(adElement, '.popup__text--price', 'textContent', ad.offer.price);
+  fillElementAtribute(adElement, '.popup__type', 'textContent', typeMap[ad.offer.type]);
+  fillElementAtribute(adElement, '.popup__text--capacity', 'textContent', getCapacity(ad.offer.rooms, ad.offer.guests));
+  fillElementAtribute(adElement, '.popup__text--time', 'textContent', getTime(ad.offer.checkin, ad.offer.checkout));
+  fillElementAtribute(adElement, '.popup__description', 'textContent', ad.offer.description);
+  fillElementAtribute(adElement, '.popup__avatar', 'src', ad.author.avatar);
 
-  createFeatures(element, ad.offer.features);
-  createPhotos(element, ad.offer.photos);
+  createFeatures(adElement, ad.offer.features);
+  createPhotos(adElement, ad.offer.photos);
 
-  return element;
+  return adElement;
 };
 
-const renderAd = (ad) => {
-  const similarAdTemplate = document.querySelector('#card').content.querySelector('.popup');
-  const adElement = createAdElement(ad, similarAdTemplate);
-  mapContainer.appendChild(adElement);
-};
-
-export { renderAd, createAdElement };
+export { createAdElement };

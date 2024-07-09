@@ -1,6 +1,5 @@
 import { enableForm, adForm } from './form.js';
 import { enableFilters } from './filters.js';
-import { createSimilarAds } from './data.js';
 import { createAdElement } from './render-ad.js';
 import { roundCoordinates } from './util.js';
 
@@ -62,28 +61,32 @@ marker.on('moveend', (evt) => {
 
 //Добавляем метки из сгенерированных днных на карту
 
-const similarAds = createSimilarAds();
-
 const icon = L.icon({
   iconUrl: './img/pin.svg',
   iconSize: [40, 40],
   iconAnchor: [20, 40],
 });
 
-const popupTemplate = document.querySelector('#card').content.querySelector('.popup');
+//Создаем однин маркер
 
-similarAds.forEach((similarAd) => {
-  const similarAdsMarker = L.marker(
+const createMarker = (ad) => {
+  const similarMarker = L.marker(
     {
-      lat: similarAd.location.lat,
-      lng: similarAd.location.lng,
+      lat: ad.location.lat,
+      lng: ad.location.lng,
     },
     {
       icon
     },
   );
 
-  similarAdsMarker
+  similarMarker
     .addTo(map)
-    .bindPopup(createAdElement(similarAd, popupTemplate));
-});
+    .bindPopup(createAdElement(ad));
+};
+
+//Создаем несколько маркеров
+
+const renderSimilarMarkers = (ads) => ads.forEach((similarAd) => createMarker(similarAd));
+
+export { renderSimilarMarkers };
