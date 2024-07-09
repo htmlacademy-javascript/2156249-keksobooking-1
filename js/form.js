@@ -137,4 +137,4 @@ adForm.addEventListener('submit', (evt) => {
   }
 });
 
-export { enableForm, adForm };
+export { enableForm, adForm, priceElement, accommodationTypeElement, typePriceRatio };
