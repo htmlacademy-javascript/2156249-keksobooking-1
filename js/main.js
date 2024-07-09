@@ -1,8 +1,9 @@
 import { createSimilarAds } from './data.js';
-import { renderAd } from './render-ad.js';
+import './render-ad.js';
 import './form.js';
 import './filters.js';
+import { renderSimilarMarkers } from './map.js';
+import './slider.js';
 
 const similarAds = createSimilarAds();
-
-renderAd(similarAds[0]);
+renderSimilarMarkers(similarAds);

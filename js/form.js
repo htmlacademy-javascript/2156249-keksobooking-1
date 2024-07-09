@@ -40,8 +40,6 @@ const disableForm = () => {
   sliderElement.disabled = true;
 };
 
-disableForm();
-
 const enableForm = () => {
   adForm.classList.remove('ad-form--disabled');
 
@@ -53,9 +51,7 @@ const enableForm = () => {
   priceElement.setAttribute('min', 1000);
 };
 
-document.addEventListener('DOMContentLoaded', () => {
-  enableForm();
-});
+disableForm();
 
 //Подключение библиотеки Pristine - основные настройки
 
@@ -140,3 +136,5 @@ adForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
   }
 });
+
+export { enableForm, adForm, priceElement, accommodationTypeElement, typePriceRatio };

@@ -1,3 +1,5 @@
+import { fillElementAtribute } from './util.js';
+
 const typeMap = {
   flat: 'Квартира',
   bungalow: 'Бунгало',
@@ -6,7 +8,6 @@ const typeMap = {
   hotel: 'Отель',
 };
 
-const mapContainer = document.querySelector('.map__canvas');
 const similarAdTemplate = document.querySelector('#card').content.querySelector('.popup');
 
 const createFeatures = (adElement, features) => {
@@ -73,14 +74,6 @@ const getCapacity = (rooms, guests) => rooms && guests ? `${rooms} ${getRoomPlur
 
 const getTime = (checkin, checkout) => checkin && checkout ? `Заезд после ${checkin}, выезд до ${checkout}` : null;
 
-const fillElementAtribute = (element, attribut, property, value) => {
-  if (!value) {
-    element.querySelector(`${attribut}`).remove();
-  } else {
-    element.querySelector(`${attribut}`)[property] = value;
-  }
-};
-
 const createAdElement = (ad) => {
   const adElement = similarAdTemplate.cloneNode(true);
 
@@ -99,10 +92,4 @@ const createAdElement = (ad) => {
   return adElement;
 };
 
-const renderAd = (ad) => {
-  const adElement = createAdElement(ad);
-  mapContainer.appendChild(adElement);
-};
-
-
-export { renderAd };
+export { createAdElement };
