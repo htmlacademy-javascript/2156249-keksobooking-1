@@ -1,4 +1,4 @@
-import { setDisabledState } from './util.js';
+import { setDisabledState, showAlert } from './util.js';
 
 const MIN_TITLE_LENGTH = 30;
 const MAX_TITLE_LENGTH = 100;
@@ -129,12 +129,24 @@ ckeckoutOutElement.addEventListener('change', onCheckOutOptionChange);
 
 //Общая валидация формы
 
-adForm.addEventListener('submit', (evt) => {
-  const isValid = pristine.validate();
-
-  if (!isValid) {
+const setAdFormSubmit = () => {
+  adForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
-  }
-});
 
-export { enableForm, adForm, sliderElement, priceElement };
+    const isValid = pristine.validate();
+    if (isValid) {
+      const formData = new FormData(evt.target);
+
+      fetch('https://28.javascript.htmlacademy.pro/keksobooking1',
+        {
+          method: 'POST',
+          body: formData,
+        }
+      );
+    }
+  });
+};
+
+
+
+export { enableForm, adForm, sliderElement, priceElement, setAdFormSubmit };
