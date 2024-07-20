@@ -1,5 +1,4 @@
 import { enableForm, adForm } from './form.js';
-import { enableFilters } from './filters.js';
 import { createAdElement } from './render-ad.js';
 import { roundCoordinates } from './util.js';
 
@@ -18,7 +17,6 @@ const addressFieldElement = adForm.querySelector('#address');
 const map = L.map('map-canvas')
   .on('load', () => {
     enableForm();
-    enableFilters();
     addressFieldElement.value = `${DefaultLocationForMarker.LAT}, ${DefaultLocationForMarker.LNG}`;
   })
   .setView({
