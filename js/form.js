@@ -1,4 +1,5 @@
-import { setDisabledState, showAlert } from './util.js';
+import { setDisabledState } from './util.js';
+import { sendData } from './api.js';
 
 const MIN_TITLE_LENGTH = 30;
 const MAX_TITLE_LENGTH = 100;
@@ -134,15 +135,9 @@ const setAdFormSubmit = () => {
     evt.preventDefault();
 
     const isValid = pristine.validate();
-    if (isValid) {
-      const formData = new FormData(evt.target);
 
-      fetch('https://28.javascript.htmlacademy.pro/keksobooking1',
-        {
-          method: 'POST',
-          body: formData,
-        }
-      );
+    if (isValid) {
+      sendData(new FormData(evt.target));
     }
   });
 };

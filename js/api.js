@@ -35,4 +35,12 @@ const getData = () => {
   return load(Route.GET_DATA, ErrorText.GET_DATA);
 };
 
-export { getData };
+// Отправка данных
+
+const sendData = (body) => {
+  return load(Route.SEND_DATA, ErrorText.GET_DATA, Method.POST, body);
+};
+
+// ?? ЧТО ДЕЛАТЬ С ERRORTEXT????
+
+export { getData, sendData };
