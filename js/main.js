@@ -5,6 +5,7 @@ import { renderSimilarMarkers } from './map.js';
 import './slider.js';
 import { getData } from './api.js';
 import { showAlert } from './util.js';
+import './reset.js';
 
 const SIMILAR_MARKERS_COUNT = 10;
 

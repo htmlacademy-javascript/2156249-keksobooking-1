@@ -57,6 +57,12 @@ marker.on('moveend', (evt) => {
   addressFieldElement.value = `${actualLat}, ${actualLng}`;
 });
 
+// Обновляем положение главной метки на исходное
+
+// const resetMarker = () => {
+//   marker.setLatLng(35.6573, 139.7823,).update();
+// };
+
 //Добавляем метки из сгенерированных днных на карту
 
 const icon = L.icon({

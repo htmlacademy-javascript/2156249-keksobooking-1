@@ -16,8 +16,8 @@ const ErrorText = {
 
 //Общая функция
 
-const load = (route, errorText, method = Method.GET, body = null) => {
-  return fetch(`${BASE_URL}${route}`, {method, body})
+const load = (route, errorText, method = Method.GET, body = null) =>
+  fetch(`${BASE_URL}${route}`, { method, body })
     .then((response) => {
       if (!response.ok) {
         throw new Error();
@@ -27,19 +27,15 @@ const load = (route, errorText, method = Method.GET, body = null) => {
     .catch(() => {
       throw new Error(errorText);
     });
-};
 
 // Получение данных
 
-const getData = () => {
-  return load(Route.GET_DATA, ErrorText.GET_DATA);
-};
+const getData = () => load(Route.GET_DATA, ErrorText.GET_DATA);
+
 
 // Отправка данных
 
-const sendData = (body) => {
-  return load(Route.SEND_DATA, ErrorText.GET_DATA, Method.POST, body);
-};
+const sendData = (body) => load(Route.SEND_DATA, ErrorText.GET_DATA, Method.POST, body);
 
 // ?? ЧТО ДЕЛАТЬ С ERRORTEXT????
 

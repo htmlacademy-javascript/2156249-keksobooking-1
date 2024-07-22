@@ -32,6 +32,12 @@ const typePriceRatio = {
 const checkInElement = adForm.querySelector('#timein');
 const ckeckoutOutElement = adForm.querySelector('#timeout');
 
+const submitButtonElement = adForm.querySelector('.ad-form__submit');
+const SubmitButtonText = {
+  IDLE: 'Опубликовать',
+  SENDING: 'Публикую...'
+};
+
 const disableForm = () => {
   adForm.classList.add('ad-form--disabled');
 
@@ -128,20 +134,33 @@ const onCheckOutOptionChange = () => {
 checkInElement.addEventListener('change', onCheckInOptionChange);
 ckeckoutOutElement.addEventListener('change', onCheckOutOptionChange);
 
+// Блокировка / разблокировка кнопки "Опубликовать"
+
+const blockSubmitButton = () => {
+  submitButtonElement.disabled = true;
+  submitButtonElement.textContent = SubmitButtonText.SENDING;
+};
+
+const unblockSubmitButton = () => {
+  submitButtonElement.disabled = false;
+  submitButtonElement.textContent = SubmitButtonText.IDLE;
+};
+
 //Общая валидация формы
 
-const setAdFormSubmit = () => {
+const setAdFormSubmit = (onSuccess) => {
   adForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
 
     const isValid = pristine.validate();
 
     if (isValid) {
-      sendData(new FormData(evt.target));
+      blockSubmitButton();
+      sendData(new FormData(evt.target))
+        .then(onSuccess)
+        .finally(unblockSubmitButton);
     }
   });
 };
-
-
 
 export { enableForm, adForm, sliderElement, priceElement, setAdFormSubmit };
