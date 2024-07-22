@@ -59,9 +59,9 @@ marker.on('moveend', (evt) => {
 
 // Обновляем положение главной метки на исходное
 
-// const resetMarker = () => {
-//   marker.setLatLng(35.6573, 139.7823,).update();
-// };
+const resetMarker = () => {
+  marker.setLatLng([DefaultLocationForMarker.LAT, DefaultLocationForMarker.LNG]);
+};
 
 //Добавляем метки из сгенерированных днных на карту
 
@@ -89,8 +89,14 @@ const createMarker = (ad) => {
     .bindPopup(createAdElement(ad));
 };
 
+// Удаляем попап
+
+const closePopup = () => {
+  map.closePopup();
+};
+
 //Создаем несколько маркеров
 
 const renderSimilarMarkers = (ads) => ads.forEach((similarAd) => createMarker(similarAd));
 
-export { renderSimilarMarkers };
+export { renderSimilarMarkers, resetMarker, closePopup };
