@@ -1,5 +1,6 @@
 import { setDisabledState } from './util.js';
 import { sendData } from './api.js';
+import { showSuccessMessage, showErrorMessage } from './message.js';
 
 const MIN_TITLE_LENGTH = 30;
 const MAX_TITLE_LENGTH = 100;
@@ -158,6 +159,8 @@ const setAdFormSubmit = (onSuccess) => {
       blockSubmitButton();
       sendData(new FormData(evt.target))
         .then(onSuccess)
+        .then(showSuccessMessage)
+        .catch(showErrorMessage)
         .finally(unblockSubmitButton);
     }
   });

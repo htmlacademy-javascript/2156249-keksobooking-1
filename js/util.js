@@ -44,7 +44,10 @@ const showAlert = (message) => {
   }, ALERT_SHOW_TIME);
 };
 
+//Проверка на нажатие клавиши Escape
+const isEscapeKey = (evt) => evt.key === 'Escape';
+
 export {
   setDisabledState, fillElementAtribute, roundCoordinates,
-  showAlert
+  showAlert, isEscapeKey
 };
