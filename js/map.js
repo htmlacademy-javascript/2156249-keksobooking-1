@@ -57,12 +57,6 @@ marker.on('moveend', (evt) => {
   addressFieldElement.value = `${actualLat}, ${actualLng}`;
 });
 
-// Обновляем положение главной метки на исходное
-
-const resetMarker = () => {
-  marker.setLatLng([DefaultLocationForMarker.LAT, DefaultLocationForMarker.LNG]);
-};
-
 //Добавляем метки из сгенерированных днных на карту
 
 const icon = L.icon({
@@ -89,9 +83,10 @@ const createMarker = (ad) => {
     .bindPopup(createAdElement(ad));
 };
 
-// Удаляем попап
+// Возвращаем карту в исходное состояние (возвращаем маркер на место и закрываем попап)
 
-const closePopup = () => {
+const resetMap = () => {
+  marker.setLatLng([DefaultLocationForMarker.LAT, DefaultLocationForMarker.LNG]);
   map.closePopup();
 };
 
@@ -99,4 +94,4 @@ const closePopup = () => {
 
 const renderSimilarMarkers = (ads) => ads.forEach((similarAd) => createMarker(similarAd));
 
-export { renderSimilarMarkers, resetMarker, closePopup };
+export { renderSimilarMarkers, resetMap };

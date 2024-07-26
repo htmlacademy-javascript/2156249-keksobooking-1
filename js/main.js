@@ -5,17 +5,17 @@ import { renderSimilarMarkers } from './map.js';
 import './slider.js';
 import { getData } from './api.js';
 import { showAlert } from './util.js';
-import { resetAll } from './reset.js';
+import { resetPage } from './page.js';
 
 const SIMILAR_MARKERS_COUNT = 10;
 
-setAdFormSubmit(resetAll);
+setAdFormSubmit(resetPage);
 
 getData()
   .then((ads) => {
     renderSimilarMarkers(ads.slice(0, SIMILAR_MARKERS_COUNT));
+    enableFilters();
   })
-  .then(() => enableFilters())
   .catch((err) => {
     showAlert(err.message);
   }

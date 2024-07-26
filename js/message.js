@@ -1,5 +1,7 @@
 import { isEscapeKey } from './util.js';
 
+const body = document.querySelector('body');
+
 const successMessageTemplate = document.querySelector('#success').content.querySelector('.success');
 const successMessageElement = successMessageTemplate.cloneNode(true);
 
@@ -7,11 +9,14 @@ const errorMessageTemplate = document.querySelector('#error').content.querySelec
 const errorMessageElement = errorMessageTemplate.cloneNode(true);
 const errorButtonElement = errorMessageElement.querySelector('.error__button');
 
-// Сообщение об успехе
 
-const hideSuccessMessage = () => {
-  successMessageElement.classList.add('hidden');
-};
+body.append(successMessageElement);
+successMessageElement.classList.add('hidden');
+
+body.append(errorMessageElement);
+errorMessageElement.classList.add('hidden');
+
+// Сообщение об успехе
 
 const onDocumentKeydownSuccess = (evt) => {
   if (isEscapeKey(evt)) {
@@ -20,19 +25,19 @@ const onDocumentKeydownSuccess = (evt) => {
   }
 };
 
+const hideSuccessMessage = () => {
+  successMessageElement.classList.add('hidden');
+  document.removeEventListener('keydown', onDocumentKeydownSuccess);
+  body.removeEventListener('click', hideSuccessMessage);
+};
+
 const showSuccessMessage = () => {
-  document.body.append(successMessageElement);
+  successMessageElement.classList.remove('hidden');
   document.addEventListener('keydown', onDocumentKeydownSuccess);
-  document.body.addEventListener('click', () => {
-    hideSuccessMessage();
-  });
+  body.addEventListener('click', hideSuccessMessage);
 };
 
 // Сообщение о неудаче
-
-const hideErrorMessage = () => {
-  errorMessageElement.classList.add('hidden');
-};
 
 const onDocumentKeydownError = (evt) => {
   if (isEscapeKey(evt)) {
@@ -41,17 +46,19 @@ const onDocumentKeydownError = (evt) => {
   }
 };
 
-const showErrorMessage = () => {
-  document.body.append(errorMessageElement);
-  document.addEventListener('keydown', onDocumentKeydownError);
-  document.body.addEventListener('click', () => {
-    hideErrorMessage();
-  });
+const hideErrorMessage = () => {
+  errorMessageElement.classList.add('hidden');
+  document.removeEventListener('keydown', onDocumentKeydownError);
+  body.removeEventListener('click', hideErrorMessage);
+  errorButtonElement.removeEventListener('click', hideErrorMessage);
 };
 
-errorButtonElement.addEventListener('click', () => {
-  hideErrorMessage();
-});
+const showErrorMessage = () => {
+  errorMessageElement.classList.remove('hidden');
+  document.addEventListener('keydown', onDocumentKeydownError);
+  body.addEventListener('click', hideErrorMessage);
+  errorButtonElement.addEventListener('click', hideErrorMessage);
+};
 
 export { showSuccessMessage, showErrorMessage };
 

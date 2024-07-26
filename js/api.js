@@ -2,7 +2,7 @@ const BASE_URL = 'https://28.javascript.htmlacademy.pro/keksobooking';
 
 const Route = {
   GET_DATA: '/data',
-  SEND_DATA: '/',
+  SEND_DATA: '/1',
 };
 
 const Method = {
@@ -12,6 +12,7 @@ const Method = {
 
 const ErrorText = {
   GET_DATA: 'Не удалось загрузить данные. Попробуйте обновить страницу',
+  SEND_DATA: 'Не удалось отправить форму. Попробуйте ещё раз',
 };
 
 //Общая функция
@@ -35,8 +36,6 @@ const getData = () => load(Route.GET_DATA, ErrorText.GET_DATA);
 
 // Отправка данных
 
-const sendData = (body) => load(Route.SEND_DATA, ErrorText.GET_DATA, Method.POST, body);
-
-// ?? ЧТО ДЕЛАТЬ С ERRORTEXT????
+const sendData = (body) => load(Route.SEND_DATA, ErrorText.SEND_DATA, Method.POST, body);
 
 export { getData, sendData };

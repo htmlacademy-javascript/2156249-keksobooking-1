@@ -24,6 +24,6 @@ disableFilters();
 
 //Сброс всех фильтров
 
-const filtersReset = () => mapFiltersForm.reset();
+const resetFilters = () => mapFiltersForm.reset();
 
-export { enableFilters, filtersReset };
+export { enableFilters, resetFilters };
