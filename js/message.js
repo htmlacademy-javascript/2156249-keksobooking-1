@@ -18,18 +18,18 @@ errorMessageElement.classList.add('hidden');
 
 // Сообщение об успехе
 
-const onDocumentKeydownSuccess = (evt) => {
-  if (isEscapeKey(evt)) {
-    evt.preventDefault();
-    hideSuccessMessage();
-  }
-};
-
 const hideSuccessMessage = () => {
   successMessageElement.classList.add('hidden');
   document.removeEventListener('keydown', onDocumentKeydownSuccess);
   body.removeEventListener('click', hideSuccessMessage);
 };
+
+function onDocumentKeydownSuccess (evt) {
+  if (isEscapeKey(evt)) {
+    evt.preventDefault();
+    hideSuccessMessage();
+  }
+}
 
 const showSuccessMessage = () => {
   successMessageElement.classList.remove('hidden');
@@ -39,19 +39,19 @@ const showSuccessMessage = () => {
 
 // Сообщение о неудаче
 
-const onDocumentKeydownError = (evt) => {
-  if (isEscapeKey(evt)) {
-    evt.preventDefault();
-    hideErrorMessage();
-  }
-};
-
 const hideErrorMessage = () => {
   errorMessageElement.classList.add('hidden');
   document.removeEventListener('keydown', onDocumentKeydownError);
   body.removeEventListener('click', hideErrorMessage);
   errorButtonElement.removeEventListener('click', hideErrorMessage);
 };
+
+function onDocumentKeydownError(evt) {
+  if (isEscapeKey(evt)) {
+    evt.preventDefault();
+    hideErrorMessage();
+  }
+}
 
 const showErrorMessage = () => {
   errorMessageElement.classList.remove('hidden');
