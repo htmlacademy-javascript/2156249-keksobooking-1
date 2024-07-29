@@ -1,4 +1,6 @@
 import { setDisabledState } from './util.js';
+import { sendData } from './api.js';
+import { showSuccessMessage, showErrorMessage } from './message.js';
 
 const MIN_TITLE_LENGTH = 30;
 const MAX_TITLE_LENGTH = 100;
@@ -30,6 +32,12 @@ const typePriceRatio = {
 
 const checkInElement = adForm.querySelector('#timein');
 const ckeckoutOutElement = adForm.querySelector('#timeout');
+
+const submitButtonElement = adForm.querySelector('.ad-form__submit');
+const SubmitButtonText = {
+  IDLE: 'Опубликовать',
+  SENDING: 'Публикую...'
+};
 
 const disableForm = () => {
   adForm.classList.add('ad-form--disabled');
@@ -127,14 +135,35 @@ const onCheckOutOptionChange = () => {
 checkInElement.addEventListener('change', onCheckInOptionChange);
 ckeckoutOutElement.addEventListener('change', onCheckOutOptionChange);
 
+// Блокировка / разблокировка кнопки "Опубликовать"
+
+const blockSubmitButton = () => {
+  submitButtonElement.disabled = true;
+  submitButtonElement.textContent = SubmitButtonText.SENDING;
+};
+
+const unblockSubmitButton = () => {
+  submitButtonElement.disabled = false;
+  submitButtonElement.textContent = SubmitButtonText.IDLE;
+};
+
 //Общая валидация формы
 
-adForm.addEventListener('submit', (evt) => {
-  const isValid = pristine.validate();
-
-  if (!isValid) {
+const setAdFormSubmit = (onSuccess) => {
+  adForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
-  }
-});
 
-export { enableForm, adForm, sliderElement, priceElement };
+    const isValid = pristine.validate();
+
+    if (isValid) {
+      blockSubmitButton();
+      sendData(new FormData(evt.target))
+        .then(onSuccess)
+        .then(showSuccessMessage)
+        .catch(showErrorMessage)
+        .finally(unblockSubmitButton);
+    }
+  });
+};
+
+export { enableForm, adForm, sliderElement, priceElement, setAdFormSubmit };

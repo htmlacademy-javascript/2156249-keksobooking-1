@@ -1,5 +1,4 @@
 import { enableForm, adForm } from './form.js';
-import { enableFilters } from './filters.js';
 import { createAdElement } from './render-ad.js';
 import { roundCoordinates } from './util.js';
 
@@ -18,7 +17,6 @@ const addressFieldElement = adForm.querySelector('#address');
 const map = L.map('map-canvas')
   .on('load', () => {
     enableForm();
-    enableFilters();
     addressFieldElement.value = `${DefaultLocationForMarker.LAT}, ${DefaultLocationForMarker.LNG}`;
   })
   .setView({
@@ -85,8 +83,15 @@ const createMarker = (ad) => {
     .bindPopup(createAdElement(ad));
 };
 
+// Возвращаем карту в исходное состояние (возвращаем маркер на место и закрываем попап)
+
+const resetMap = () => {
+  marker.setLatLng([DefaultLocationForMarker.LAT, DefaultLocationForMarker.LNG]);
+  map.closePopup();
+};
+
 //Создаем несколько маркеров
 
 const renderSimilarMarkers = (ads) => ads.forEach((similarAd) => createMarker(similarAd));
 
-export { renderSimilarMarkers };
+export { renderSimilarMarkers, resetMap };
