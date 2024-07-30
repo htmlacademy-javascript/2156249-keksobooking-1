@@ -57,13 +57,17 @@ marker.on('moveend', (evt) => {
   addressFieldElement.value = `${actualLat}, ${actualLng}`;
 });
 
-//Добавляем метки из сгенерированных днных на карту
+//Добавляем метки из сгенерированных данных на карту
 
 const icon = L.icon({
   iconUrl: './img/pin.svg',
   iconSize: [40, 40],
   iconAnchor: [20, 40],
 });
+
+//Создаем слой, на который будем добавлять метки
+
+const markerGroup = L.layerGroup().addTo(map);
 
 //Создаем однин маркер
 
@@ -79,7 +83,7 @@ const createMarker = (ad) => {
   );
 
   similarMarker
-    .addTo(map)
+    .addTo(markerGroup)
     .bindPopup(createAdElement(ad));
 };
 
@@ -92,6 +96,10 @@ const resetMap = () => {
 
 //Создаем несколько маркеров
 
-const renderSimilarMarkers = (ads) => ads.forEach((similarAd) => createMarker(similarAd));
+const renderSimilarMarkers = (ads) => {
+  markerGroup.clearLayers();
+  map.closePopup();
+  ads.forEach((similarAd) => createMarker(similarAd));
+};
 
 export { renderSimilarMarkers, resetMap };
