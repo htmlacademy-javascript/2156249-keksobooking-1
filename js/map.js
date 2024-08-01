@@ -104,6 +104,6 @@ const renderSimilarMarkers = (ads) => {
   ads.forEach((similarAd) => createMarker(similarAd));
 };
 
-const debouncedRenderMarkers = debounce(() => renderSimilarMarkers(ads), RERENDER_DELAY);
+const debouncedRenderMarkers = debounce((ads) => renderSimilarMarkers(ads), RERENDER_DELAY);
 
 export { renderSimilarMarkers, resetMap, debouncedRenderMarkers };
