@@ -1,6 +1,8 @@
 import { enableForm, adForm } from './form.js';
 import { createAdElement } from './render-ad.js';
-import { roundCoordinates } from './util.js';
+import { roundCoordinates, debounce } from './util.js';
+
+const RERENDER_DELAY = 500;
 
 const DefaultLocationForMap = {
   LAT: 35.6421,
@@ -57,13 +59,17 @@ marker.on('moveend', (evt) => {
   addressFieldElement.value = `${actualLat}, ${actualLng}`;
 });
 
-//Добавляем метки из сгенерированных днных на карту
+//Добавляем метки из сгенерированных данных на карту
 
 const icon = L.icon({
   iconUrl: './img/pin.svg',
   iconSize: [40, 40],
   iconAnchor: [20, 40],
 });
+
+//Создаем слой, на который будем добавлять метки
+
+const markerGroup = L.layerGroup().addTo(map);
 
 //Создаем однин маркер
 
@@ -79,7 +85,7 @@ const createMarker = (ad) => {
   );
 
   similarMarker
-    .addTo(map)
+    .addTo(markerGroup)
     .bindPopup(createAdElement(ad));
 };
 
@@ -92,6 +98,12 @@ const resetMap = () => {
 
 //Создаем несколько маркеров
 
-const renderSimilarMarkers = (ads) => ads.forEach((similarAd) => createMarker(similarAd));
+const renderSimilarMarkers = (ads) => {
+  markerGroup.clearLayers();
+  map.closePopup();
+  ads.forEach((similarAd) => createMarker(similarAd));
+};
 
-export { renderSimilarMarkers, resetMap };
+const debouncedRenderMarkers = debounce((ads) => renderSimilarMarkers(ads), RERENDER_DELAY);
+
+export { renderSimilarMarkers, resetMap, debouncedRenderMarkers };

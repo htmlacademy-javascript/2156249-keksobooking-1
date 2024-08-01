@@ -1,6 +1,6 @@
 import './render-ad.js';
 import { setAdFormSubmit } from './form.js';
-import { enableFilters } from './filters.js';
+import { initFilters } from './filters.js';
 import { renderSimilarMarkers } from './map.js';
 import './slider.js';
 import { getData } from './api.js';
@@ -14,7 +14,7 @@ setAdFormSubmit(resetPage);
 getData()
   .then((ads) => {
     renderSimilarMarkers(ads.slice(0, SIMILAR_MARKERS_COUNT));
-    enableFilters();
+    initFilters(ads);
   })
   .catch((err) => {
     showAlert(err.message);

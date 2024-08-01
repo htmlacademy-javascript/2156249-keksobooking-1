@@ -47,7 +47,16 @@ const showAlert = (message) => {
 //Проверка на нажатие клавиши Escape
 const isEscapeKey = (evt) => evt.key === 'Escape';
 
+//Функция дебаунса
+const debounce = (callback, timeoutDelay) => {
+  let timeoutId;
+  return (...rest) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
+  };
+};
+
 export {
   setDisabledState, fillElementAtribute, roundCoordinates,
-  showAlert, isEscapeKey
+  showAlert, isEscapeKey, debounce
 };
