@@ -1,15 +1,33 @@
 import { setDisabledState } from './util.js';
 import { renderSimilarMarkers } from './map.js';
 
-
 const SIMILAR_MARKERS_COUNT = 10;
+
+const priceFilter = {
+  low: {
+    start: 0,
+    end: 10000,
+  },
+  middle: {
+    start: 10000,
+    end: 50000,
+  },
+  high: {
+    start: 50000,
+    end: 1000000,
+  },
+};
 
 const mapFiltersForm = document.querySelector('.map__filters');
 const filterElements = mapFiltersForm.querySelectorAll('.map__filter');
+
 const featuresElement = mapFiltersForm.querySelector('.map__features');
+const featuresCheckboxElements = featuresElement.querySelectorAll('.map__checkbox');
 
 const typeSelectElement = document.querySelector('#housing-type');
-//const priceSelectElement = document.querySelector('#housing-price');
+const priceSelectElement = document.querySelector('#housing-price');
+const roomSelectElement = document.querySelector('#housing-rooms');
+const guestSelectElement = document.querySelector('#housing-guests');
 
 const disableFilters = () => {
   mapFiltersForm.classList.add('map__filters--disabled');
@@ -33,52 +51,71 @@ disableFilters();
 
 const resetFilters = () => mapFiltersForm.reset();
 
-//Фильтрация по типу жилья
+//Фильтрация по различным типам
 
-// const filterByType = (ad) => {
-//   const value = typeSelectElement.value;
-//   if (value === 'any') {
-//     return true;
-//   }
-//   return value === ad.offer.type;
-// };
+const filterByType = (ad) => {
+  const value = typeSelectElement.value;
+  if (value === 'any') {
+    return true;
+  }
+  return value === ad.offer.type;
+};
 
-const setFilterByType = (ads) => {
-  typeSelectElement.addEventListener('change', () => {
-    const filteredAds = ads.filter((ad) => {
-      if (typeSelectElement.value === 'any') {
-        return ad;
-      }
-      return ad.offer.type === typeSelectElement.value;
-    });
-    renderSimilarMarkers(filteredAds.slice(0, SIMILAR_MARKERS_COUNT));
+const filterByPrice = (ad) => {
+  const value = priceSelectElement.value;
+  if (value === 'any') {
+    return true;
+  }
+  return ad.offer.price >= priceFilter[value].start && ad.offer.price <= priceFilter[value].end;
+};
+
+const filterByRoom = (ad) => {
+  const value = roomSelectElement.value;
+  if (value === 'any') {
+    return true;
+  }
+  return +value === ad.offer.rooms;
+};
+
+const filterByGuest = (ad) => {
+  const value = guestSelectElement.value;
+  if (value === 'any') {
+    return true;
+  }
+  return +value === ad.offer.guests;
+};
+
+const filterByFeatures = (ad) => {
+  const checkedFeatures = Array.from(featuresCheckboxElements)
+    .filter((feature) => feature.checked);
+
+  return checkedFeatures.every((feature) => {
+    if (!ad.offer.features) {
+      return false;
+    }
+    return ad.offer.features.includes(feature.value);
   });
 };
 
-//Фильтрация по цене
+//Общая фильтрация
+const setFilters = (ads) => {
+  mapFiltersForm.addEventListener('change', () => {
+    const filteredAds = ads.filter((ad) =>
+      filterByType(ad) &&
+      filterByPrice(ad) &&
+      filterByRoom(ad) &&
+      filterByGuest(ad) &&
+      filterByFeatures(ad)
+    );
 
-// const setFilterByPrice = (ads) => {
-//   priceSelectElement.addEventListener('change', () => {
-//     const currentSelectValue = priceSelectElement.options[priceSelectElement.selectedIndex].value;
-//     const filteredAds = ads.filter((ad) => {
-//       if (currentSelectValue === 'middle') {
-//         return ad.offer.price >= 10000 && ad.offer.price <= 50000;
-//       } else if (currentSelectValue === 'low') {
-//         return ad.offer.price < 10000;
-//       } else if (currentSelectValue === 'high') {
-//         return ad.offer.price > 50000;
-//       } else {
-//         return ad;
-//       }
-//     });
-//     renderSimilarMarkers(filteredAds.slice(0, SIMILAR_MARKERS_COUNT));
-//   });
-// };
+    renderSimilarMarkers(filteredAds.slice(0, SIMILAR_MARKERS_COUNT));
+  });
 
+};
 
 const initFilters = (ads) => {
   enableFilters();
-  setFilterByType(ads);
+  setFilters(ads);
 };
 
 export { enableFilters, resetFilters, initFilters };
