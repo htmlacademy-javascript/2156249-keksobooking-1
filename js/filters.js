@@ -1,5 +1,5 @@
 import { setDisabledState } from './util.js';
-import { renderSimilarMarkers } from './map.js';
+import { debouncedRenderMarkers } from './map.js';
 
 const SIMILAR_MARKERS_COUNT = 10;
 
@@ -106,9 +106,9 @@ const setFilters = (ads) => {
       filterByRoom(ad) &&
       filterByGuest(ad) &&
       filterByFeatures(ad)
-    );
+    ).slice(0, SIMILAR_MARKERS_COUNT);
 
-    renderSimilarMarkers(filteredAds.slice(0, SIMILAR_MARKERS_COUNT));
+    debouncedRenderMarkers(filteredAds);
   });
 
 };

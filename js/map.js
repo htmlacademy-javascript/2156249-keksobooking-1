@@ -1,6 +1,8 @@
 import { enableForm, adForm } from './form.js';
 import { createAdElement } from './render-ad.js';
-import { roundCoordinates } from './util.js';
+import { roundCoordinates, debounce } from './util.js';
+
+const RERENDER_DELAY = 500;
 
 const DefaultLocationForMap = {
   LAT: 35.6421,
@@ -102,4 +104,6 @@ const renderSimilarMarkers = (ads) => {
   ads.forEach((similarAd) => createMarker(similarAd));
 };
 
-export { renderSimilarMarkers, resetMap };
+const debouncedRenderMarkers = debounce(renderSimilarMarkers, RERENDER_DELAY);
+
+export { renderSimilarMarkers, resetMap, debouncedRenderMarkers };
