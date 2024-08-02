@@ -1,13 +1,11 @@
 const FILE_TYPES = ['jpg', 'jpeg', 'png'];
 
-const IMG_WIDTH = 300;
-const IMG_HEIGHT = 180;
-
 const avatarChooserElement = document.querySelector('#avatar');
 const avatarPreviewElement = document.querySelector('.ad-form-header__preview img');
 
+const adPhotoContainer = document.querySelector('.ad-form__photo-container');
 const adPhotoChooserElement = document.querySelector('#images');
-const adPhotoPreviewElement = document.querySelector('.ad-form__photo');
+const adPhotoPreviewTemplate = document.querySelector('#upload').content.querySelector('.ad-form__photo');
 
 avatarChooserElement.addEventListener('change', () => {
   const file = avatarChooserElement.files[0];
@@ -27,11 +25,10 @@ adPhotoChooserElement.addEventListener('change', () => {
   const matches = FILE_TYPES.some((item) => fileName.endsWith(item));
 
   if (matches) {
-    const image = document.createElement('img');
-    image.width = IMG_WIDTH;
-    image.height = IMG_HEIGHT;
-    image.alt = 'Фото жилья';
+    const adPhotoPreviewElement = adPhotoPreviewTemplate.cloneNode(true);
+    const image = adPhotoPreviewElement.querySelector('img');
     image.src = URL.createObjectURL(file);
-    adPhotoPreviewElement.appendChild(image);
+
+    adPhotoContainer.appendChild(adPhotoPreviewElement);
   }
 });
