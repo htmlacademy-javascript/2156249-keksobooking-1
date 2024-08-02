@@ -6,6 +6,7 @@ import './slider.js';
 import { getData } from './api.js';
 import { showAlert } from './util.js';
 import { resetPage } from './page.js';
+import './photos.js';
 
 const SIMILAR_MARKERS_COUNT = 10;
 
