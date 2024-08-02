@@ -10,10 +10,10 @@ const errorMessageElement = errorMessageTemplate.cloneNode(true);
 const errorButtonElement = errorMessageElement.querySelector('.error__button');
 
 
-body.append(successMessageElement);
+body.appendChild(successMessageElement);
 successMessageElement.classList.add('hidden');
 
-body.append(errorMessageElement);
+body.appendChild(errorMessageElement);
 errorMessageElement.classList.add('hidden');
 
 // Сообщение об успехе

@@ -37,7 +37,7 @@ const showAlert = (message) => {
 
   alertContainer.textContent = message;
 
-  document.body.append(alertContainer);
+  document.body.appendChild(alertContainer);
 
   setTimeout(() => {
     alertContainer.remove();
